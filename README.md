@@ -25,8 +25,8 @@ NOTE: README generated with Claude Sonnet 5.5.
 ```
 sample-size-guidance/
 ├── code/
-│   ├── CODE1_process_L1_to_L2.R           # view only (proprietary data)
-│   ├── CODE2_process_L2_to_L3.R           # view only (proprietary data)
+│   ├── CODE1_process_L1_to_L2.R           # view only 
+│   ├── CODE2_process_L2_to_L3.R           # view only 
 │   ├── CODE3_process_L3_to_L4_basins.R
 │   ├── CODE3_process_L3_to_L4_heatmap.R
 │   ├── CODE4_process_L4_to_L5_basins.R
@@ -51,13 +51,13 @@ Level 1 --CODE1--> Level 2 --CODE2--> Level 3 --CODE3--> Level 4 --CODE4--> Leve
 
 | Level | Contents | Produced by | Available? |
 |---|---|---|---|
-| 1 | Source emission rate data as provided by the data owners | n/a | No, proprietary |
-| 2 | Per-basin, per-source emission rate files (for Williams et al., one file per realization) | `CODE1` | No, proprietary |
+| 1 | Source emission rate data as provided by the data owners | n/a | No, COBE data proprietary |
+| 2 | Per-basin, per-source emission rate files (for Williams et al., one file per realization) | `CODE1` | No, COBE data proprietary |
 | 3 | **`x_vectors`**: sorted emission rate vectors (kg/h) that define the "true" distribution sampled from in each basin | `CODE2` | Yes, Zenodo |
 | 4 | **`sample_means`**: matrices of sample means from repeated random sampling | `CODE3` | Yes, Zenodo |
 | 5 | **`metrics`**: summaries of sample mean error as a function of sample size | `CODE4` | Yes, Zenodo |
 
-**Levels 1 and 2 are proprietary and cannot be redistributed.** `CODE1` and `CODE2` are included so that the processing from raw data to Level 3 is transparent, but they cannot be run without access to those data. They use hard-coded paths on the original author's machine, not `zenodo.dir`, and you should not need to edit them. **The publicly available data begin at `data_level_3/x_vectors`**, and everything from `CODE3` onward can be run from the Zenodo archive.
+**Some Level 1 and 2 data are proprietary and cannot be redistributed.** `CODE1` and `CODE2` are included so that the processing from raw data to Level 3 is transparent, but they cannot be run without access to those data. They use hard-coded paths on the original author's machine, not `zenodo.dir`, and you should not need to edit them. **The publicly available data begin at `data_level_3/x_vectors`**, and everything from `CODE3` onward can be run from the Zenodo archive. Other Level 1 and 2 data are publicly available and can be accessed from their respective papers.
 
 ### Zenodo archive structure
 
