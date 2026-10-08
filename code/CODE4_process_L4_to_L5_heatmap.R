@@ -5,14 +5,14 @@ library(doParallel)
 
 set.seed(1)
 
-base.dir <- '/Users/wdaniels/Documents/papers/sampling/'
-
-save.dir <- paste0(base.dir, 'data_level_5/metrics/basin_level/denver_julesburg/')
+zenodo.dir <- '/Users/wdaniels/Documents/papers/sampling_zenodo/'
 
 
 ######### HEATMAPS
 
-x <- readRDS(paste0(base.dir, 'data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds'))
+save.dir <- paste0(zenodo.dir, 'data_level_5/metrics/basin_level/denver_julesburg/')
+
+x <- readRDS(paste0(zenodo.dir, 'data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds'))
 n <- length(x)
 x <- x[-n]
 
@@ -30,7 +30,7 @@ for (a in 1:length(y.vals)){
   
   x.tmp <- c(x, y.vals[a])
   
-  sample.means <- readRDS(paste0(base.dir, 'data_level_4/sample_means/basin_level/denver_julesburg/sherwin_mean_heatmap', a, ".rds"))
+  sample.means <- readRDS(paste0(zenodo.dir, 'data_level_4/sample_means/basin_level/denver_julesburg/sherwin_mean_heatmap', a, ".rds"))
 
   true.mean <- mean(x.tmp)
   err <- 100 * (sample.means - true.mean) / true.mean
