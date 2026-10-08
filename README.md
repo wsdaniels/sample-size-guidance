@@ -8,7 +8,9 @@ Methane emissions from oil and gas operations follow right-skewed, heavy-tailed 
 
 **Data:** all data needed to run the analysis (Levels 3–5, described below) are archived on Zenodo: https://doi.org/10.5281/zenodo.XXXXXXX
 
-NOTE: README generated with Claude Sonnet 5.5.
+Michael Basanese at the Colorado School of Mines created a webtool to interact with the data and the sampling results. Access it here: https://mbasanese-sampling.share.connect.posit.cloud/
+
+NOTE: This README was generated with Claude Sonnet 5.5.
 
 ## Contents
 
