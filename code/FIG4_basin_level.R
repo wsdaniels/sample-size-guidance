@@ -2,6 +2,17 @@ if(!is.null(dev.list())){dev.off()}
 rm(list = ls())
 gc()
 
+library(RColorBrewer)
+library(scales)
+library(fields)
+
+
+zenodo.dir <- "/Users/wdaniels/Documents/papers/sampling_zenodo/"
+
+
+##### SAMPLE SIZE FIGURE
+
+
 forward_ma <- function(x, n){
   sapply(seq_along(x), function(i){
     end <- min(i + n, length(x))
@@ -17,27 +28,22 @@ centered_ma <- function(x, n){
   })
 }
 
-library(RColorBrewer)
-library(scales)
-library(fields)
-
 cols <- brewer.pal(8, "Dark2")[1:6]
 cols[5] <- "gray20"
 
-base.dir <- '/Users/wdaniels/Documents/papers/sampling/'
-basins <- list.files(paste0(base.dir, "data_level_5/metrics/basin_level"))
+basins <- list.files(paste0(zenodo.dir, "data_level_5/metrics/basin_level"))
 
 sherwin <- williams <- kunkel.equip <- kunkel.site <- cobe <- vector(mode = "list", length = length(basins))
 names(sherwin) <- names(williams) <- names(kunkel.site) <- names(kunkel.equip) <- names(cobe) <- basins
 for (i in 1:length(basins)){
-  williams[[i]]$average <- readRDS(paste0(base.dir, "data_level_5/metrics/basin_level/", basins[i], "/williams_mean.rds"))
-  sherwin[[i]]$average <- readRDS(paste0(base.dir, "data_level_5/metrics/basin_level/", basins[i], "/sherwin_mean.rds"))
+  williams[[i]]$average <- readRDS(paste0(zenodo.dir, "data_level_5/metrics/basin_level/", basins[i], "/williams_mean.rds"))
+  sherwin[[i]]$average <- readRDS(paste0(zenodo.dir, "data_level_5/metrics/basin_level/", basins[i], "/sherwin_mean.rds"))
   if (i == 3){
-    cobe[[i]]$average <- readRDS(paste0(base.dir, "data_level_5/metrics/basin_level/", basins[i], "/cobe_mean.rds"))
+    cobe[[i]]$average <- readRDS(paste0(zenodo.dir, "data_level_5/metrics/basin_level/", basins[i], "/cobe_mean.rds"))
   }
   if (i == 4){
-    kunkel.equip[[i]]$average <- readRDS(paste0(base.dir, "data_level_5/metrics/basin_level/", basins[i], "/kunkel-equip_mean.rds"))
-    kunkel.site[[i]]$average <- readRDS(paste0(base.dir, "data_level_5/metrics/basin_level/", basins[i], "/kunkel-site_mean.rds"))
+    kunkel.equip[[i]]$average <- readRDS(paste0(zenodo.dir, "data_level_5/metrics/basin_level/", basins[i], "/kunkel-equip_mean.rds"))
+    kunkel.site[[i]]$average <- readRDS(paste0(zenodo.dir, "data_level_5/metrics/basin_level/", basins[i], "/kunkel-site_mean.rds"))
   }
 }
 data <- list(williams = williams, sherwin = sherwin, cobe = cobe, kunkel.equip = kunkel.equip, kunkel.site = kunkel.site)
@@ -98,7 +104,7 @@ plot.titles = list("Median error in the sample mean (% of true mean)",
 
 for (m in 1:length(metrics)){ # Loop over metrics to plot
   
-  png(paste0('/Users/wdaniels/Documents/papers/sampling/figures/metrics_', metrics[m], '.png'),
+  png(paste0('../figures/metrics_', metrics[m], '.png'),
       width = 1920, height = 1080, res = 100, pointsize = 28)
   
   par(mfrow = c(1,2))
@@ -112,6 +118,13 @@ for (m in 1:length(metrics)){ # Loop over metrics to plot
     
     plot(1,1, col = "white", ylim = ylim.vals[[m]], ylab = "", yaxt = "n", xaxt = "n",
          xlim = c(xlim.start.vals[p], xlim.end.vals[p]), xaxs = "i", yaxs = "i")
+    
+    if (m == 1){
+      abline(h = 0, lwd = lwd.val)
+      if ( p == 1){
+        axis(side = 2, at = 0, , lwd = lwd.val, las = 2)
+      }
+    }
     
     for (b in 1:length(basins)){ # Loop over basins
       
@@ -168,7 +181,7 @@ for (m in 1:length(metrics)){ # Loop over metrics to plot
       }
       
       if (p == 1 & m == 3){ legend("topleft", c("Williams et al. (2025)", "Sherwin et al. (2024)", "Brown et al. (2025)",
-                                                "Kunkel et al. (2023) - Equip", "Kunkel et al. (2023) - Site"), 
+                                                "Kunkel et al. (2023) Source-Level", "Kunkel et al. (2023) 150 m"), 
                                    lty = c(3,1,2,4,5), lwd = 3, bty = "n") }
       
     } # End loop over basins
@@ -179,10 +192,10 @@ for (m in 1:length(metrics)){ # Loop over metrics to plot
   } else {             legend("right",       legend.names, lwd = 5, col = cols, bty = "n") }
   
   if (m == 2){legend("right", c("Williams et al. (2025)", "Sherwin et al. (2024)", "Brown et al. (2025)",
-                                "Kunkel et al. (2023) - Equip", "Kunkel et al. (2023) - Site"), 
+                                "Kunkel et al. (2023) Source-Level", "Kunkel et al. (2023) 150 m"), 
                      lty = c(3,1,2,4,5), lwd = 3, bty = "n")
   } else if (m != 3){ legend("bottomright", c("Williams et al. (2025)", "Sherwin et al. (2024)", "Brown et al. (2025)",
-                                              "Kunkel et al. (2023) - Equip", "Kunkel et al. (2023) - Site"), 
+                                              "Kunkel et al. (2023) Source-Level", "Kunkel et al. (2023) 150 m"), 
                              lty = c(3,1,2,4,5), lwd = 3, bty = "n") }
   
   mtext("Fraction of distribution sampled", side = 1, outer = T, line = 2)
@@ -197,28 +210,20 @@ for (m in 1:length(metrics)){ # Loop over metrics to plot
 
 
 library(moments)
+library(lmom)
 
 calc_features <- function(x){
   x <- x[!is.na(x)]
   
-  n_large <- sd(x)
-  # n_large <- log(sum(x>100), base = 10)
-  top1 <- sd(x)/mean(x)
-  # top1 <- ifelse(sum(x)==0, 0, max(x)/sum(x))
+  n_large <- log(sum(x>100), base = 10)
+  top1 <- ifelse(sum(x)==0, 0, max(x)/sum(x))
   
-  # n_large <- mean(x)
-  # top1 <- sd(x)
-  
-  # n_large <- log(skewness(x), base = 10)
-  # top1 <- log(kurtosis(x), base = 10)
-  
-  # n_large <- sum(sort(x, decreasing = T)[1:10])/sum(x)
   c(n_large = n_large, top1 = top1)
 }
 feature_names <- c("n_large", "top1")
 n.features <- length(feature_names)
 
-base.dir <- "/Users/wdaniels/Documents/papers/sampling/data_level_3/x_vectors/basin_level/"
+base.dir <- paste0(zenodo.dir, "data_level_3/x_vectors/basin_level/")
 basins <- list.files(base.dir)
 
 features <- list(williams =     vector(mode = "list", length = length(basins)),
@@ -280,7 +285,8 @@ lty.list <- list(2, 1, 3, 3, 3)
 vert.list <- list((1:6) - 0.2, (1:6) + 0.2, (1:6), (1:6) + 0.1, (1:6) - 0.1)
 
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/basin_summary_stats.png',
+
+png('../figures/basin_summary_stats.png',
     width = 1920, height = 1080*1.45, res = 100, pointsize = 34)
 
 par(mgp = c(3, 0.66, 0))
@@ -381,13 +387,9 @@ for (k in 1:3){
     
     if (j == 1){
       axis(side = 1, at = c(1, 1.5, 2, 2.5), lwd.tick = lwd.val) # n_large
-      # axis(side = 1, at = seq(0,6, 2), lwd.tick = lwd.val) # mean
-      # axis(side = 1, at = seq(1.2,2, 0.2), lwd.tick = lwd.val) # skewness
       axis(side = 2, at = seq(0,1,0.2), las =2 , lwd.tick = lwd.val)
     } else {
       this.seq <- seq(0.02, 0.1, length.out = 3) # top1
-      # this.seq <- seq(0, 100, length.out = 5) # sd
-      # this.seq <- seq(2, 5, by = 0.5) # kurtosis
       axis(side =1, at = this.seq, labels = round(this.seq, 2), lwd.tick = lwd.val)
     }
     box(lwd = lwd.val)
@@ -401,18 +403,3 @@ dev.off()
 
 
 
-t(sign.vals)
-t(round(r.vals, 2))
-t(round(p.vals, 2))
-
-
-largest.diff <- vector(length = 3)
-for (i in c(1,2,3)){
-  largest.diff[i] <- max(largest.diff,
-                         max(abs(ss$williams[[i]]-ss$sherwin[[i]])))
-}
-largest.diff
-ss$sherwin[[3]][1]-ss$williams[[3]][1]
-
-
-ss$sherwin[[2]][1,1] - ss$williams[[2]][1,1]

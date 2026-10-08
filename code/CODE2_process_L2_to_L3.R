@@ -71,20 +71,14 @@ for (b in 1:length(basins)){
       num.to.add <- round(sum(x.mean >= 3) / williams.ratio.above.3)
       x.mean <- sort(c(sample(williams.x.vals[williams.x.vals < 3], num.to.add, replace = F),
                        x.mean[x.mean >= 3]))
-      
-      # sherwin.ratio.above.3 <- sum(sherwin.x.vals >= 3)/length(sherwin.x.vals)
-      # num.to.add <- round(sum(x.mean >= 3) / sherwin.ratio.above.3)
-      # x.mean <- sort(c(sample(sherwin.x.vals[sherwin.x.vals < 3], num.to.add, replace = T),
-      #                  x.mean[x.mean >= 3]))
     } 
     
-    
     if (d == "williams"){
-      saveRDS(x.mean, paste0(base.dir, 'data_level_3/x_vectors/basin_level/', basins[b], '/', d, '_mean.rds'))
+      saveRDS(x.mean,  paste0(base.dir, 'data_level_3/x_vectors/basin_level/', basins[b], '/', d, '_mean.rds'))
       saveRDS(x.lower, paste0(base.dir, 'data_level_3/x_vectors/basin_level/', basins[b], '/', d, '_lower.rds'))
       saveRDS(x.upper, paste0(base.dir, 'data_level_3/x_vectors/basin_level/', basins[b], '/', d, '_upper.rds'))
     } else {
-      saveRDS(x.mean, paste0(base.dir, 'data_level_3/x_vectors/basin_level/', basins[b], '/', d, '_mean.rds'))
+      saveRDS(x.mean,  paste0(base.dir, 'data_level_3/x_vectors/basin_level/', basins[b], '/', d, '_mean.rds'))
     }
   }
 }

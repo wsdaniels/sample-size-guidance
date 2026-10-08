@@ -1,6 +1,3 @@
-
-######### HEAT MAPS
-
 rm(list = ls())
 
 library(viridis)
@@ -11,13 +8,19 @@ library(lubridate)
 
 set.seed(1)
 
+zenodo.dir <- '/Users/wdaniels/Documents/papers/sampling_zenodo/' # CHANGE THIS
+
+######### HEAT MAPS
+
 lwd.val <- 4
 example.sample.size <- 1000
 
-x <- readRDS('/Users/wdaniels/Documents/papers/sampling/data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds')
+x <- readRDS(paste0(zenodo.dir, 
+                    'data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds'))
 
 
-big.out <- readRDS('/Users/wdaniels/Documents/papers/sampling/data_level_5/metrics/basin_level/denver_julesburg/sherwin_mean_heatmap.rds')
+big.out <- readRDS(paste0(zenodo.dir,
+                          'data_level_5/metrics/basin_level/denver_julesburg/sherwin_mean_heatmap.rds'))
 sample.sizes <- big.out[[1]]$sample.sizes/length(x)
 p.vals <- big.out[[1]]$p.vals
 
@@ -33,7 +36,7 @@ within10.mat <- do.call(rbind, within10.mat)
 
 lwd.val <- 5
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/heatmap_median.png',
+png('../figures/heatmap_median.png',
     width = 900, height = 1080*0.65, res = 100, pointsize = 28)
 
 
@@ -85,7 +88,7 @@ dev.off()
 
 
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/heatmap_max_error.png',
+png('../figures/heatmap_max_error.png',
     width = 900, height = 1080*0.65, res = 100, pointsize = 28)
 
 par(mar = c(2,2,2,2))
@@ -130,7 +133,7 @@ dev.off()
 
 
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/heatmap_within10.png',
+png('../figures/heatmap_within10.png',
     width = 900, height = 1080*0.65, res = 100, pointsize = 28)
 
 par(mar = c(2,2,2,2))

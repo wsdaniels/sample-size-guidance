@@ -5,6 +5,8 @@ library(viridis)
 library(fields)
 library(moments)
 
+zenodo.dir <- "/Users/wdaniels/Documents/papers/sampling_zenodo/" # CHANGE THIS
+
 max.length <- 100000
 
 lwd.val <- 5
@@ -27,9 +29,9 @@ resample.vector <- function(x, new.length) {
   approx(old.ind, x, xout = new.ind)$y
 }
 
-base.dir <- '/Users/wdaniels/Documents/papers/sampling/data_level_3/x_vectors/'
+base.dir <- paste0(zenodo.dir, '/data_level_3/x_vectors/')
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/data_overview.png',
+png('../figures/data_overview.png',
     width = 1920, height = 1080, res = 100, pointsize = 34)
 
 par(mgp = c(2.5, 0.75, 0))
@@ -203,52 +205,3 @@ mtext("Methane emission rate (kg/hr)", side = 1, outer = T, line = 0, cex = 0.8)
 dev.off()
 
 
-
-round(t(features[,6,]), 1) # rows = features, cols = distributions
-basin.names[6]
-
-
-
-
-test <- features[,,6]
-rownames(test) <- distribution.names
-colnames(test) <- basin.names
-round(test, 3)
-
-mean.vals <- as.vector(features[,,1])
-var.vals <- as.vector(features[,,2])
-skew.vals <- as.vector(features[,,3])
-kurtosis.vals <- as.vector(features[,,4])
-n.large.vals <- as.vector(features[,,5])
-top1.vals <- as.vector(features[,,6])
-length.vals <- as.vector(features[,,7])
-max.vals <- as.vector(features[,,8])
-
-
-
-plot(length.vals, skew.vals, ylim = c(0,400))
-l <- 1:1e5
-lines(l, 0.5*(l-2)/sqrt(l-1))
-
-
-plot(length.vals, kurtosis.vals, ylim = c(0,50000))
-lines(l, 0.2*l-3)
-
-plot(length.vals, skew.vals)
-plot(length.vals, kurtosis.vals)
-plot(length.vals, top1.vals)
-plot(length.vals, max.vals)
-
-plot(var.vals, skew.vals)
-plot(length.vals, var.vals)
-plot(length.vals, skew.vals)
-
-#distribution, basin, feature
-
-plot(features[2,,7], features[2, ,6], col = "orange",
-     pch = 19, xlim = c(0,100000), ylim = c(0, 0.15))
-
-# points(features[1,,7], features[1,,6], pch = 19, col = "blue")
-# points(features[3,,7], features[3,,6], pch = 19, col = "forestgreen")
-# points(features[4,,7], features[4,,6], pch = 19, col = "red")
-# points(features[5,,7], features[5,,6], pch = 19, col = "purple")

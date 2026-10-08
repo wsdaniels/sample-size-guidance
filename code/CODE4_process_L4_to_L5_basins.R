@@ -5,7 +5,11 @@ library(doParallel)
 
 set.seed(1)
 
-base.dir <- '/Users/wdaniels/Documents/papers/sampling/data_level_4/sample_means/basin_level/'
+zenodo.dir <- '/Users/wdaniels/Documents/papers/sampling_zenodo/' # CHANGE THIS
+
+### Compute metrics
+
+base.dir <- paste0(zenodo.dir, 'data_level_4/sample_means/basin_level/')
 basins <- list.files(base.dir)
 
 for (d in c("sherwin", "williams", "cobe", "kunkel-equip", "kunkel-site")){
@@ -14,13 +18,13 @@ for (d in c("sherwin", "williams", "cobe", "kunkel-equip", "kunkel-site")){
     
     print(paste0(b, "/", length(basins)))
     
-    files <- list.files(paste0('/Users/wdaniels/Documents/papers/sampling/data_level_3/x_vectors/basin_level/', basins[b], "/"))
+    files <- list.files(paste0(zenodo.dir, 'data_level_3/x_vectors/basin_level/', basins[b], "/"))
     files <- files[grepl(d, files)]
     files <- files[grepl("mean", files)]
     
     if (length(files) == 0){ next }
     
-    x <- readRDS(paste0('/Users/wdaniels/Documents/papers/sampling/data_level_3/x_vectors/basin_level/', basins[b], "/", files[1]))
+    x <- readRDS(paste0(zenodo.dir, 'data_level_3/x_vectors/basin_level/', basins[b], "/", files[1]))
     sample.means <- readRDS(paste0(base.dir, basins[b], '/', d, '_mean.rds'))
     
     true.mean <- mean(x)
@@ -39,7 +43,7 @@ for (d in c("sherwin", "williams", "cobe", "kunkel-equip", "kunkel-site")){
                     within90  = apply(err, 2, function(X) sum(abs(X) < 90)/length(X)),
                     within100 = apply(err, 2, function(X) sum(abs(X) < 100)/length(X)))
     
-    saveRDS(to.save, paste0('/Users/wdaniels/Documents/papers/sampling/data_level_5/metrics/basin_level/', basins[b], "/", d, "_mean.rds"))
+    saveRDS(to.save, paste0(zenodo.dir, 'data_level_5/metrics/basin_level/', basins[b], "/", d, "_mean.rds"))
     
   }
 }

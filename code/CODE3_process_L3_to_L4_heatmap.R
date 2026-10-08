@@ -6,21 +6,20 @@ library(doParallel)
 set.seed(1)
 
 R <- 1250 # Number of replicates
-n.cores <- 64
+n.cores <- 6
 
-save.dir <- '/glade/work/wdaniels/sampling/data_level_4/sample_means/basin_level/denver_julesburg/'
-
+zenodo.dir <- '/Users/wdaniels/Documents/papers/sampling_zenodo/' # CHANGE THIS
 
 ######### HEATMAPS
 
-x <- readRDS('/glade/work/wdaniels/sampling/data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds')
+x <- readRDS(paste0(zenodo.dir, 'data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds'))
 n <- length(x)
 x <- x[-n]
 
 p.vals <- seq(0.035, 0.1575, by = 0.0025)
 y.vals <- p.vals*sum(x)/(1-p.vals)
 
-for (a in 41:50){
+for (a in 1:length(p.vals)){
   
   print(paste0(a, "/", length(y.vals)))
   
@@ -29,11 +28,8 @@ for (a in 41:50){
   cl <- makeCluster(n.cores)
   registerDoParallel(cl)
   
-  # --- Parallel (r, s) grid ---
-  # We evaluate each row of the matrix as one parallel job
-  # total jobs = R * n
   sample.means <- foreach(r = 1:R, .combine = rbind, .packages = "stats") %dopar% {
-    # For this replicate r, compute means at all sample sizes
+    
     this.replicate <- vector(length = n)
     for (s in 1:n) {
       this.replicate[s] <- mean(sample(x.tmp, size = s, replace = FALSE))
@@ -43,7 +39,9 @@ for (a in 41:50){
   
   stopCluster(cl)
   
-  saveRDS(sample.means, paste0(save.dir, "sherwin_mean_heatmap", a, ".rds"))
+  saveRDS(sample.means, paste0(zenodo.dir,
+                               'data_level_4/sample_means/basin_level/denver_julesburg/',
+                               "sherwin_mean_heatmap", a, ".rds"))
   
 }
 

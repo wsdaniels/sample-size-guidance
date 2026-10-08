@@ -6,12 +6,14 @@ library(moments)
 library(fields)
 library(lubridate)
 
+zenodo.dir <- '/Users/wdaniels/Documents/papers/sampling_zenodo/' # CHANGE THIS
+
 set.seed(1)
 
 lwd.val <- 4
 example.sample.size <- 200
 
-x <- readRDS('/Users/wdaniels/Documents/papers/sampling/data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds')
+x <- readRDS(paste0(zenodo.dir, 'data_level_3/x_vectors/basin_level/denver_julesburg/sherwin_mean.rds'))
 
 second.largest <- sort(x, decreasing = T)[2]
 
@@ -51,7 +53,7 @@ h.s1 <- hist(s1.log, plot = F, breaks = break.vals)
 h.s2 <- hist(s2.log, plot = F, breaks = break.vals)
 h.s3 <- hist(s3.log, plot = F, breaks = break.vals)
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/histograms.png',
+png('../figures/histograms.png',
     width = 1920/2, height = 1080*0.75, res = 100, pointsize = 24)
 
 par(mgp = c(3,0.75,0))
@@ -121,7 +123,8 @@ dev.off()
 
 set.seed(1)
 
-sample.means <- readRDS('/Users/wdaniels/Documents/papers/sampling/data_level_4/sample_means/basin_level/denver_julesburg/sherwin_mean.rds')
+sample.means <- readRDS(paste0(zenodo.dir, 
+                               'data_level_4/sample_means/basin_level/denver_julesburg/sherwin_mean.rds'))
 
 sample.sizes <- seq_along(x)
 
@@ -173,7 +176,7 @@ round(sum((midpoint < true.mean))/length(midpoint), 2)
 
 
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/heatmap_sample_means.png',
+png('../figures/heatmap_sample_means.png',
     width = 1920/2, height = 1080*0.75, res = 100, pointsize = 24)
 
 my.pal <- colorRampPalette(rev(c(rep("#E8E79AFF",1),
@@ -246,7 +249,7 @@ ylim.vals <- c(0,4)
 
 cols <- my.pal(30)
 
-png('/Users/wdaniels/Documents/papers/sampling/figures/slices.png',
+png('../figures/slices.png',
     width = 1920, height = 1080*0.5, res = 100, pointsize = 36)
 
 layout.mat <- matrix(c(rep(1, plot.widths[1]), 
