@@ -228,6 +228,6 @@ If you use this code or data, please cite the paper:
 }
 ```
 
-and the Zenodo data archive: https://doi.org/10.5281/zenodo.XXXXXXX
+and the Zenodo data archive: https://doi.org/10.5281/zenodo.23424890
 
 For questions or bug reports, please open an issue on this repository.
