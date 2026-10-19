@@ -6,7 +6,7 @@ Code accompanying:
 
 Methane emissions from oil and gas operations follow right-skewed, heavy-tailed distributions, so the average emission rate estimated from a limited number of measurements can differ substantially from the true average. This repository contains the R code used to quantify that sampling error for six US oil and gas basins: it repeatedly draws samples of every possible size from each basin's emission rate distribution, summarises the resulting error in the sample mean, and produces the figures in the paper.
 
-**Data:** all data needed to run the analysis (Levels 3–5, described below) are archived on Zenodo: https://doi.org/10.5281/zenodo.XXXXXXX
+**Data:** all data needed to run the analysis (Levels 3–5, described below) are archived on Zenodo: https://doi.org/10.5281/zenodo.23424890
 
 **Interactive webtool:** Michael Basanese at the Colorado School of Mines created a webtool to interact with the data and the sampling results. Access it here: https://mbasanese-sampling.share.connect.posit.cloud/
 
